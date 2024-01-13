@@ -1,0 +1,25 @@
+version: '3.1'
+services:
+  database:
+    image: 'postgres:latest'
+    restart: always
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: legacy_app_db 
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data/ 
+
+  app:
+    image: "legacy-python-app"
+    restart: always
+    build:
+      context: .
+    ports:
+      - '5001:5000'
+    depends_on:
+      - database
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: legacy_app_db 
